@@ -109,6 +109,23 @@ if(isset($_POST['type'])){
         }
     }
 
+    if($_POST['type']=="load_current_records"){
+
+        $sql = "SELECT `health_records`.id,`first_name`, `last_name`, `age`, `nic`, `sugar_level`, `pressure_level`, `body_temp`, `BMI`, `input_date`, `record_status` FROM `adults_info`,`health_records` WHERE `adults_info`.`nic`=`health_records`.`adult_id` AND `input_date` = CURRENT_DATE();";
+        $db = new DbConnect;
+        if(!$conn = $db->connect())
+        {
+            echo 'SQL Error';
+            exit();
+        }
+        else {
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $trs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            echo json_encode($trs);
+        }
+    }
+
 
 }
 
